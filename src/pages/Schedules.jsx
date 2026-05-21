@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
-import BookingFlow from '../components/BookingFlow';
+import AddScheduleModal from '../components/AddScheduleModal';
 import './Schedules.css';
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -40,14 +40,24 @@ const doctors = [
 
 export default function Schedules() {
   const { t } = useLanguage();
-  const [showBooking, setShowBooking] = useState(false);
+  const [showAddSchedule, setShowAddSchedule] = useState(false);
+
+  const handleConfirmSchedule = (scheduleData) => {
+    console.log("New schedule added:", scheduleData);
+    setShowAddSchedule(false);
+  };
 
   return (
     <div className="schedules-page fade-in">
-      {showBooking && <BookingFlow onClose={() => setShowBooking(false)} onConfirm={() => setShowBooking(false)} />}
+      {showAddSchedule && (
+        <AddScheduleModal 
+          onClose={() => setShowAddSchedule(false)} 
+          onConfirm={handleConfirmSchedule} 
+        />
+      )}
       <div className="page-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div><h1>{t('schedules')}</h1><p>{t('viewSchedules')}</p></div>
-        <button className="btn btn-primary"><Plus size={15} /> Add Schedule</button>
+        <button className="btn btn-primary" onClick={() => setShowAddSchedule(true)}><Plus size={15} /> Add Schedule</button>
       </div>
 
       <div className="schedule-layout">

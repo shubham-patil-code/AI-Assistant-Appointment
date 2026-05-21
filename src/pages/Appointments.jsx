@@ -34,7 +34,7 @@ export default function Appointments() {
     if (booking) {
       const newAppt = {
         id: `PT00${Math.floor(Math.random() * 9000 + 1000)}`,
-        patient: 'New Patient',
+        patient: booking.patientName || 'AI Patient',
         doctor: booking.doctor?.name || 'TBD',
         specialty: booking.doctor?.specialty || booking.dept,
         date: booking.date?.full || 'TBD',

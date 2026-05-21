@@ -94,7 +94,7 @@ export default function BookingFlow({ onClose, onConfirm }) {
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
   const { notify } = useNotifications();
   const [step, setStep] = useState(1);
-  const [symptomText, setSymptomText] = useState('');
+
   const [analyzing, setAnalyzing] = useState(false);
   const [aiResult, setAiResult] = useState(null);
   const [selectedDept, setSelectedDept] = useState(null);
@@ -104,8 +104,11 @@ export default function BookingFlow({ onClose, onConfirm }) {
   const [confirming, setConfirming] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
+  const [patientName, setPatientName] = useState('');
+  const [patientNameError, setPatientNameError] = useState('');
+  const [symptomText, setSymptomText] = useState('');
+
   const analyzeSymptoms = async () => {
-    if (!symptomText.trim()) return;
     setAnalyzing(true);
     setStep(2);
 
@@ -119,17 +122,29 @@ export default function BookingFlow({ onClose, onConfirm }) {
     let confidence = 82;
 
     if (text.includes('chest') || text.includes('heart') || text.includes('cardiac') || text.includes('palpitat')) {
-      dept = 'Cardiology'; urgency = 'high'; confidence = 94;
+      dept = 'Cardiology';
+      urgency = 'high';
+      confidence = 94;
     } else if (text.includes('head') || text.includes('neuro') || text.includes('seizure') || text.includes('dizz')) {
-      dept = 'Neurology'; urgency = 'medium'; confidence = 88;
+      dept = 'Neurology';
+      urgency = 'medium';
+      confidence = 88;
     } else if (text.includes('skin') || text.includes('rash') || text.includes('itch') || text.includes('acne')) {
-      dept = 'Dermatology'; urgency = 'low'; confidence = 91;
+      dept = 'Dermatology';
+      urgency = 'low';
+      confidence = 91;
     } else if (text.includes('joint') || text.includes('bone') || text.includes('fracture') || text.includes('spine')) {
-      dept = 'Orthopedics'; urgency = 'medium'; confidence = 87;
+      dept = 'Orthopedics';
+      urgency = 'medium';
+      confidence = 87;
     } else if (text.includes('fever') || text.includes('cold') || text.includes('cough') || text.includes('flu')) {
-      dept = 'General Medicine'; urgency = 'low'; confidence = 85;
+      dept = 'General Medicine';
+      urgency = 'low';
+      confidence = 85;
     } else if (text.includes('eye') || text.includes('vision') || text.includes('blur')) {
-      dept = 'Ophthalmology'; urgency = 'medium'; confidence = 90;
+      dept = 'Ophthalmology';
+      urgency = 'medium';
+      confidence = 90;
     }
 
     setAiResult({ department: dept, urgency, confidence });
@@ -137,6 +152,14 @@ export default function BookingFlow({ onClose, onConfirm }) {
     setAnalyzing(false);
   };
 
+  const handleAnalyze = () => {
+    if (!patientName.trim()) {
+      setPatientNameError('Patient name is required');
+      return;
+    }
+    setPatientNameError('');
+    analyzeSymptoms();
+  };
   const goToDoctor = () => setStep(3);
   const goToDateTime = () => { if (selectedDoctor) setStep(4); };
   const goToConfirm = () => { if (selectedDate && selectedTime) setStep(5); };
@@ -161,6 +184,7 @@ export default function BookingFlow({ onClose, onConfirm }) {
         date: selectedDate,
         time: selectedTime,
         dept: selectedDept,
+        patientName: patientName,
       });
     }, 1500);
   };
@@ -217,9 +241,9 @@ export default function BookingFlow({ onClose, onConfirm }) {
                   { code: 'hi', label: 'HI' },
                   { code: 'mr', label: 'MR' }
                 ].map(l => (
-                  <button 
-                    key={l.code} 
-                    className={`lang-btn ${currentLanguage === l.code ? 'active' : ''}`} 
+                  <button
+                    key={l.code}
+                    className={`lang-btn ${currentLanguage === l.code ? 'active' : ''}`}
                     onClick={() => setCurrentLanguage(l.code)}
                   >
                     {l.label}
@@ -227,6 +251,19 @@ export default function BookingFlow({ onClose, onConfirm }) {
                 ))}
               </div>
 
+              <div className="patient-name-input">
+                <label className="patient-name-label">{t('patientName') || 'Patient Name'}:</label>
+                <input
+                  type="text"
+                  className="patient-name-field"
+                  placeholder={t('enterPatientName') || 'Enter patient name'}
+                  value={patientName}
+                  onChange={e => setPatientName(e.target.value)}
+                  required
+                  aria-describedby="patient-name-error"
+                />
+                {patientNameError && <p id="patient-name-error" className="patient-name-error">{patientNameError}</p>}
+              </div>
               <div className="symptom-input-wrap">
                 <textarea
                   className="symptom-textarea"
@@ -252,7 +289,7 @@ export default function BookingFlow({ onClose, onConfirm }) {
               <div className="bstep-footer">
                 <button
                   className="btn-booking-primary"
-                  onClick={analyzeSymptoms}
+                  onClick={handleAnalyze}
                   disabled={!symptomText.trim()}
                 >
                   <Brain size={16} /> {t('analyzeWithAI') || 'Analyze with AI'}
@@ -584,5 +621,5 @@ export default function BookingFlow({ onClose, onConfirm }) {
 
 // Inline component since lucide doesn't export Users2 reliably
 function Users2({ size = 14 }) {
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>;
 }

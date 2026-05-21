@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Plus, Star, Phone, Mail, Calendar, Users } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 import BookingFlow from '../components/BookingFlow';
+import AddDoctorModal from '../components/AddDoctorModal';
 import './Doctors.css';
 
 const doctors = [
@@ -23,6 +24,7 @@ export default function Doctors() {
   const [dept, setDept] = useState('All');
   const [view, setView] = useState('card');
   const [showBooking, setShowBooking] = React.useState(false);
+  const [showAddDoctor, setShowAddDoctor] = useState(false);
 
   const filtered = doctors.filter(d =>
     (dept === 'All' || d.dept === dept) &&
@@ -31,6 +33,7 @@ export default function Doctors() {
 
   return (
     <div className="doctors-page fade-in">
+      {showAddDoctor && <AddDoctorModal onClose={() => setShowAddDoctor(false)} />}
       {showBooking && (
         <BookingFlow
           onClose={() => setShowBooking(false)}
@@ -39,7 +42,7 @@ export default function Doctors() {
       )}
       <div className="page-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div><h1>{t('doctors')}</h1><p>{t('manageDoctors')}</p></div>
-        <button className="btn btn-primary"><Plus size={15} /> {t('addDoctor') || 'Add Doctor'}</button>
+        <button className="btn btn-primary" onClick={() => setShowAddDoctor(true)}><Plus size={15} /> {t('addDoctor') || 'Add Doctor'}</button>
       </div>
 
       <div className="doctors-toolbar fade-in-1">

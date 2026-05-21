@@ -1,0 +1,193 @@
+/* =========================
+   Overlay (Background)
+========================= */
+.add-doctor-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* =========================
+   Modal Container
+========================= */
+.add-doctor-modal {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: modalFadeIn 0.25s ease-out;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+/* Animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   Header
+========================= */
+.add-doctor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.add-doctor-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+/* Close Button */
+.modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #e5e7eb;
+}
+
+/* =========================
+   Form
+========================= */
+.add-doctor-form {
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+/* Label + Input */
+.add-doctor-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Inputs */
+.add-doctor-form input,
+.add-doctor-form select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.add-doctor-form input:focus,
+.add-doctor-form select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* =========================
+   Error Message
+========================= */
+.error-msg {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid #fecaca;
+}
+
+/* =========================
+   Actions
+========================= */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-ghost {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Primary */
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Ghost */
+.btn-ghost {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.btn-ghost:hover {
+  background: #e5e7eb;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 640px) {
+  .add-doctor-modal {
+    max-width: 95%;
+    border-radius: 12px;
+  }
+
+  .add-doctor-form {
+    padding: 16px;
+  }
+
+  .add-doctor-header {
+    padding: 14px 16px;
+  }
+}
